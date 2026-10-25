@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#170d2c">
+<title>Una aventura para Mi vidashhh 💗</title>
+<style>
+:root{--bg:#10091e;--panel:#211638;--pink:#ff79b9;--pink2:#ffb6d8;--cream:#fff4fb;--muted:#cdbbdc;--gold:#ffe39a}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--cream);font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;background:radial-gradient(ellipse at 15% 10%,#45205d 0,transparent 40%),radial-gradient(ellipse at 90% 30%,#5a214e 0,transparent 35%),var(--bg);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.3;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:47px 47px;mask-image:linear-gradient(to bottom,#000,transparent 85%)}
+.wrap{width:min(760px,92vw);margin:auto;padding:26px 0 50px;position:relative}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted);font-size:.85rem}
+.logo{letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--pink2)}
+.pill{border:1px solid #75518a;background:#241633;padding:7px 12px;border-radius:99px}
+.progress{height:7px;background:#382447;border-radius:99px;margin:20px 0 30px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--pink),#ffd0e5);transition:width .4s}
+.card{border:1px solid #70466e;background:linear-gradient(145deg,rgba(47,29,68,.95),rgba(27,16,43,.96));border-radius:28px;padding:clamp(22px,5vw,42px);box-shadow:0 25px 90px #0005;position:relative;overflow:hidden}
+.eyebrow{font-size:.78rem;letter-spacing:.17em;text-transform:uppercase;color:var(--pink2);font-weight:800}
+h1{font-size:clamp(2.1rem,8vw,4.2rem);line-height:1.02;margin:15px 0 18px;letter-spacing:-.045em}
+h2{font-size:clamp(1.5rem,5vw,2.3rem);line-height:1.1;margin:12px 0}
+p{color:#e9dced;line-height:1.7;font-size:1.04rem}
+.hero-icon{font-size:4rem;filter:drop-shadow(0 0 22px #ff79b988);margin:14px 0}
+.buttons{display:grid;gap:11px;margin-top:26px}
+button{font:inherit;cursor:pointer;border:1px solid #9e6597;color:var(--cream);background:#39234e;border-radius:16px;padding:15px 17px;text-align:left;transition:transform .16s,border-color .16s,background .16s}
+button:hover,button:focus-visible{transform:translateY(-2px);border-color:var(--pink);background:#4a2b5c;outline:none}
+button.primary{background:linear-gradient(100deg,#ff78b7,#e95a9f);border:0;color:#2a1030;font-weight:900;text-align:center;box-shadow:0 8px 24px #ff78b733}
+button.primary:hover{background:linear-gradient(100deg,#ff9bc9,#ff78b7)}
+.small{font-size:.85rem;color:var(--muted)}
+.hidden{display:none!important}
+.choice{display:flex;align-items:center;gap:12px}
+.choice span:first-child{font-size:1.35rem}
+.note{border-left:3px solid var(--pink);padding:4px 0 4px 15px;margin:22px 0;color:#f6d8e9}
+.secret{margin-top:18px;border:1px dashed #b982b4;border-radius:15px;padding:14px;color:var(--pink2);background:#321b3c}
+.ending{text-align:center}
+.ending .heart{font-size:5rem;animation:beat 1.2s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+footer{text-align:center;color:#a994b7;font-size:.8rem;margin:22px 0}
+.sparkle{color:var(--gold)}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><span class="logo">♡ VIDASHHH QUEST</span><span class="pill" id="levelLabel">PRÓLOGO · NIVEL 0</span></div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <section class="card" id="game" aria-live="polite">
+    <div class="eyebrow" id="eyebrow">Una misión especial</div>
+    <div class="hero-icon" id="icon">🌙💗</div>
+    <h1 id="title">Mi vidashhh, ¿lista para una aventura?</h1>
+    <p id="copy">Hay mundos llenos de secretos, decisiones importantes y un jugador que tiene algo bonito que decirte. Esta pequeña aventura fue creada solo para ti, Krisbell.</p>
+    <div class="buttons" id="choices">
+      <button class="primary" onclick="startGame()">▶ Empezar partida</button>
+    </div>
+    <div class="small" id="hint">Consejo de la misión: explora con el corazón. No hay respuestas incorrectas. ✨</div>
+  </section>
+  <footer>Hecho con cariño, píxeles imaginarios y una cantidad sospechosa de corazones. 💗</footer>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+let step = 0, secrets = 0, choicesMade = [];
+const levels = [
+ {label:"NIVEL 1 · EL PORTAL",eyebrow:"Misión 01",icon:"🗝️🌷",title:"El portal de las pequeñas cosas",copy:"Para abrir el primer portal, hay que elegir qué clase de recuerdo merece guardarse en una cajita mágica.",hint:"Pista: las cosas pequeñas también pueden volverse gigantes en el corazón.",choices:[
+  ["🌷","Una conversación que terminó haciéndome sonreír","A veces una frase sencilla se queda dando vueltas en la cabeza durante todo el día.","memoria"],
+  ["🎧","Una canción que ahora tiene otro significado","La música tiene ese poder extraño: de pronto una melodía parece guardar un momento entero.","musica"],
+  ["🌌","Un instante normal que se sintió especial","No siempre hace falta fuegos artificiales. A veces basta con estar ahí.","instante"]
+ ]},
+ {label:"NIVEL 2 · EL BOSQUE",eyebrow:"Misión 02",icon:"🌳✨",title:"El bosque de las decisiones",copy:"Un letrero aparece entre las luciérnagas: «¿Qué hace bonita una aventura de dos?» El camino se abre según tu respuesta.",hint:"No hay que ser perfectos para construir algo lindo.",choices:[
+  ["🫶","Escucharnos incluso en días complicados","El camino se ilumina. Entenderse no siempre es automático, pero elegir escucharse importa muchísimo.","escucha"],
+  ["😂","Reírnos de tonterías hasta perder el hilo","Una bandada de patitos pixelados cruza el bosque. El narrador confirma que el humor absurdo es patrimonio mundial.","risa"],
+  ["🌱","Aprender y crecer a nuestro ritmo","Las flores se abren. Cada quien sigue siendo sí mismo, y aun así pueden acompañarse.","crecer"]
+ ]},
+ {label:"NIVEL 3 · LA PUERTA SECRETA",eyebrow:"Misión 03",icon:"🔐💞",title:"Una puerta que solo abre con una palabra",copy:"La puerta te pide una contraseña. No es una fecha ni un código imposible. Es el apodo secreto que guarda esta aventura.",hint:"Psst… empieza por «Mi» y termina con muchas h.",choices:[
+  ["💗","Mi vidashhh","¡ACCESO CONCEDIDO! La puerta reconoce el apodo y despliega un cielo de corazones. Has encontrado el secreto principal.","secret"]
+ ]},
+ {label:"NIVEL FINAL · EL CORAZÓN",eyebrow:"Misión final desbloqueada",icon:"💌",title:"El mensaje detrás de todos los niveles",copy:"Llegaste al final de la aventura. Pero la recompensa no es una corona ni una espada legendaria. Es un mensaje sincero.",hint:"Puedes leerlo despacito. Esta parte no tiene cronómetro.",choices:[
+  ["💌","Abrir la declaración","final","final"]
+ ]}
+];
+function startGame(){step=0;renderLevel()}
+function renderLevel(){
+ const l=levels[step];
+ $("levelLabel").textContent=l.label;$("eyebrow").textContent=l.eyebrow;$("icon").textContent=l.icon;
+ $("title").textContent=l.title;$("copy").textContent=l.copy;$("hint").textContent=l.hint;
+ $("bar").style.width=(step/(levels.length))*100+"%";
+ const box=$("choices");box.innerHTML="";
+ l.choices.forEach((c,i)=>{
+  const b=document.createElement("button");
+  b.className=(step===levels.length-1?"primary":"");
+  b.innerHTML='<div class="choice"><span>'+c[0]+'</span><span>'+c[1]+'</span></div>';
+  b.onclick=()=>choose(c);box.appendChild(b);
+ });
+ if(step===2){const s=document.createElement("button");s.textContent="🕵️ Buscar un secreto extra";s.onclick=extraSecret;box.appendChild(s)}
+}
+function choose(c){
+ choicesMade.push(c[3]);
+ if(c[3]==="final"){showEnding();return}
+ if(c[3]==="secret")secrets++;
+ if(c[2] && c[3]!=="secret"){$("copy").textContent=c[2];}
+ step=Math.min(step+1,levels.length-1);renderLevel();
+}
+function extraSecret(){
+ if(secrets>1){$("hint").textContent="El secreto ya fue encontrado. El sistema de ternura no permite duplicar este tesoro. 💗";return}
+ secrets++;
+ const d=document.createElement("div");d.className="secret";d.innerHTML="<strong>SECRETO EXTRA DESBLOQUEADO ✨</strong><br>Logro obtenido: hacer que esta página tenga una razón para existir. Recompensa: un abrazo imaginario y +1000 puntos de ternura.";
+ $("choices").appendChild(d);$("hint").textContent="Logro oculto: Corazón explorador. 💗";
+}
+function showEnding(){
+ $("levelLabel").textContent="MISIÓN COMPLETADA";$("bar").style.width="100%";
+ $("eyebrow").textContent="De Leonel, para Krisbell";$("icon").textContent="💗";
+ $("game").classList.add("ending");
+ $("title").textContent="Mi vidashhh…";
+ $("copy").innerHTML="Quería regalarte algo distinto, un pequeño mundo que pudieras recorrer y que terminara diciéndote lo que de verdad importa: <strong>me haces muy feliz y me encanta tenerte en mi vida</strong>. Me gusta compartir contigo mis días, nuestras tonterías, las conversaciones y esos momentos que se vuelven especiales sin avisar.<br><br>No necesito que todo sea perfecto ni prometerte un cuento de hadas. Quiero seguir conociéndote, cuidando lo nuestro, escuchándote y construyendo recuerdos contigo, a nuestro ritmo.<br><br><strong>Te amo, Mi vidashhh. Gracias por ser tú y por formar parte de mi historia. 💗</strong>";
+ $("choices").innerHTML='<button class="primary" onclick="replay()">↻ Volver a jugar</button><button onclick="copyMessage()">💌 Copiar la declaración</button>';
+ $("hint").textContent=secrets?"🏆 Logro desbloqueado: exploradora de secretos.":"🏆 Logro desbloqueado: llegó al final con el corazón.";
+}
+function copyMessage(){
+ const msg="Mi vidashhh, me haces muy feliz y me encanta tenerte en mi vida. Me gusta compartir contigo mis días, nuestras tonterías, las conversaciones y esos momentos que se vuelven especiales sin avisar. No necesito que todo sea perfecto ni prometerte un cuento de hadas. Quiero seguir conociéndote, cuidando lo nuestro, escuchándote y construyendo recuerdos contigo, a nuestro ritmo. Te amo, Mi vidashhh. Gracias por ser tú y por formar parte de mi historia. 💗";
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(msg).then(()=>{$("hint").textContent="Declaración copiada. Lista para guardar o enviar. 💌"}).catch(()=>{$("hint").textContent=msg})}else{$("hint").textContent=msg}
+}
+function replay(){$("game").classList.remove("ending");step=0;secrets=0;choicesMade=[];renderLevel()}
+</script>
+</body>
+</html>
